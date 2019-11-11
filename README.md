@@ -3,5 +3,5 @@ Some examples of use of the [neosemantics plugin](https://github.com/neo4j-labs/
 
 
 CONTENTS:
-* Importing JSON-LD from a zipped file in jsonline format. ([link to source](https://github.com/jbarrasa/neosemantics-python-examples/blob/master/jsonlines/loadRDFFromJsonLines.py))
+* Importing JSON-LD from a zipped file in jsonline format ([link to source](https://github.com/jbarrasa/neosemantics-python-examples/blob/master/jsonlines/loadRDFFromJsonLines.py)).
 * Loading into [RDFLib](https://rdflib.readthedocs.io/en/stable/) the result of a cypher query on your Neo4j graph ([link to source](https://github.com/jbarrasa/neosemantics-python-examples/blob/master/rdflib/loadRDFFromCypher.py)).
