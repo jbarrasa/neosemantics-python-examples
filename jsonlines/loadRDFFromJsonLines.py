@@ -29,7 +29,7 @@ with driver.session() as session:
             for line in jsonl_file:
                 batch.append(line.decode('utf-8'))
                 if len(batch) == batch_size:
-                    session.read_transaction(load_batch, batch)
+                    session.write_transaction(load_batch, batch)
                     batch = []
             session.read_transaction(load_batch, batch)
 
