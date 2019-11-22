@@ -1,0 +1,50 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix clmat: <http://www.nsmntx.org/2019/10/clothingMaterials#> .
+@prefix ccat: <http://www.nsmntx.org/customCats#> .
+
+<http://www.nsmntx.org/customCats>
+  a owl:Ontology ;
+  rdfs:comment "Custom categories for semantic search system" ;
+  rdfs:label "Custom categories" .
+
+ccat:AnimalBasedMaterial
+  a owl:Class ;
+  rdfs:label "Animal-based material", "Materiales de origen animal"@es, "matière d'origine animale"@fr  .
+
+clmat:Leather
+  rdfs:subClassOf ccat:AnimalBasedMaterial .
+
+clmat:Silk
+  rdfs:subClassOf ccat:AnimalBasedMaterial .
+
+clmat:Wool
+  rdfs:subClassOf ccat:AnimalBasedMaterial .
+
+
+ccat:WinterFabric
+  a owl:Class ;
+  rdfs:label "Winter Fabric", "Tejidos de invierno"@es, "Tissus pour l'hiver"@fr  .
+
+clmat:Leather
+  rdfs:subClassOf ccat:WinterFabric .
+
+clmat:Cotton
+  rdfs:subClassOf ccat:WinterFabric .
+
+clmat:Wool
+  rdfs:subClassOf ccat:WinterFabric .
+
+
+ccat:SummerFabric
+  a owl:Class ;
+  rdfs:label "Summer fabric"@en, "Tejidos de verano"@es, "Tissus pour l'été"@fr .
+
+clmat:Linen
+  rdfs:subClassOf ccat:SummerFabric .
+
+clmat:Cotton
+  rdfs:subClassOf ccat:SummerFabric .
+
+clmat:Silk
+  rdfs:subClassOf ccat:SummerFabric .  
