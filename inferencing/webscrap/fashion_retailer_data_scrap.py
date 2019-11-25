@@ -21,7 +21,7 @@ def parse_item(url, brandName):
         product['itemName'] = article['data-itemname']
         product['brandName'] = brandName
         # the following two  are not always available so there'll be 'NOT_IN_USE'
-        product['itemDepartmemnt'] = article['data-department']
+        product['itemDepartment'] = article['data-department']
         product['itemCategory'] = article['data-category']
         productComposition = table.findAll('div', attrs={'id': 'Composition'})
         if productComposition:
@@ -39,7 +39,7 @@ def parse_item(url, brandName):
 
 
 f = open(os.path.join(data_dir_name, 'next_products.csv'), 'w')
-w = csv.DictWriter(f, fieldnames=['url', 'itemId', 'itemName', 'brandName', 'itemDepartmemnt', 'itemCategory',
+w = csv.DictWriter(f, fieldnames=['url', 'itemId', 'itemName', 'brandName', 'itemDepartment', 'itemCategory',
                                   'itemComposition', 'itemPairing'], quoting=csv.QUOTE_ALL)
 w.writeheader()
 

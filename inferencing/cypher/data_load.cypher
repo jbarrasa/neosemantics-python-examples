@@ -12,7 +12,7 @@ CALL semantics.importOntology("http://www.nsmntx.org/2019/10/clothingMaterials",
 // Load data
 LOAD CSV WITH HEADERS FROM "file:///next_products.csv"  AS row
 MERGE (b:Brand { brandName : row.brandName })
-MERGE (dep:Department { deptName: row.itemDepartmemnt })
+MERGE (dep:Department { deptName: row.itemDepartment })
 MERGE (cat:Category { catName: row.itemCategory })
 MERGE (i:Item { itemId: row.itemId }) ON CREATE set i.itemName = row.itemName, i.composition = row.itemComposition, i.url = row.url
 MERGE (i)-[:IN_CAT]->(cat)
