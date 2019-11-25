@@ -27,29 +27,57 @@ FOREACH (material IN [x in termToClassMap where toLower(i.composition) contains 
 
 
 //Extend the ontology with custom categories
-:params onto: "@prefix owl: <http://www.w3.org/2002/07/owl#> . @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . @prefix clmat: <http://www.nsmntx.org/2019/10/clothingMaterials#> . @prefix ccat: <http://www.nsmntx.org/customCats#> . <http://www.nsmntx.org/customCats>  a owl:Ontology ;  rdfs:comment 'Custom categories for semantic search system' ;  rdfs:label 'Custom categories' . ccat:AnimalBasedMaterial  a owl:Class ;  rdfs:label 'Animal-based material' . clmat:Leather rdfs:subClassOf ccat:AnimalBasedMaterial . clmat:Silk rdfs:subClassOf ccat:AnimalBasedMaterial . clmat:Wool rdfs:subClassOf ccat:AnimalBasedMaterial ."
-CALL semantics.importOntologySnippet($onto,"Turtle", { keepLangTag: true, handleMultival: 'ARRAY'})
+WITH '@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix clmat: <http://www.nsmntx.org/2019/10/clothingMaterials#> .
+@prefix ccat: <http://www.nsmntx.org/customCats#> .
 
+ccat:AnimalBasedMaterial
+a owl:Class ;
+rdfs:label "Animal-based material", "Materiales de origen animal"@es, "matière dorigine animale"@fr .
 
+clmat:Leather
+rdfs:subClassOf ccat:AnimalBasedMaterial .
+
+clmat:Silk
+rdfs:subClassOf ccat:AnimalBasedMaterial .
+
+clmat:Wool
+rdfs:subClassOf ccat:AnimalBasedMaterial .
+'
+AS onto
+CALL semantics.importOntologySnippet(onto,"Turtle", { keepLangTag: true, handleMultival: 'ARRAY'}) YIELD terminationStatus, triplesLoaded
+RETURN terminationStatus, triplesLoaded ;
+
+//list synthetic materials  in different languages
+UNWIND ['es','en','fr'] AS lang
+MATCH (w:Class { name: 'SyntheticFibre'})<-[:SCO*]-(woolVariant)
+RETURN lang, COLLECT(semantics.getLangValue(lang,woolVariant.label)) as syntheticMaterials
+
+//fleeces by Columbia
 MATCH (:Category { catName: "Fleeces"})<-[:IN_CAT]-(i:Item)-[:BY]->(:Brand { brandName: "Columbia"})
 RETURN i.itemId as id, i.itemName as name, i.url as url, i.composition as composition
 
+//Brands producing hoodies
 MATCH (:Category { catName: "Hoodies"})<-[:IN_CAT]-(i:Item)-[:BY]->(b:Brand)
-RETURN b.brandName as brand, count(i) as productCount ORDER BY productCount DESC LIMIT 5
+RETURN b.brandName as brand, count(i) as productCount ORDER BY productCount DESC LIMIT 5 ;
 
+//All leather products (explicit and implicit)
 MATCH (leather:Class { name: "Leather"})
 CALL semantics.inference.nodesInCategory(leather, { inCatRel: "CONTAINS" }) yield node AS product
 WITH product MATCH (product)-[:BY]->(b:Brand)
-return product.itemName AS product, b.brandName AS brand, product.composition AS composition
+return product.itemName AS product, b.brandName AS brand, product.composition AS composition ;
 
 
-MATCH (leather:Class { name: "Leather"})
-CALL semantics.inference.nodesInCategory(leather, { inCatRel: "CONTAINS" }) yield node AS product
-WITH product MATCH (product)-[:BY]->(b:Brand) AND NOT (product)-[:CONTAINS]->(leather)
-return product.itemName AS product, b.brandName AS brand, product.composition AS composition
+//Vegan trainers
+MATCH (:Category {catName:"Trainers"})<-[:IN_CAT]-(item:Item)-[:BY]->(b:Brand), (ab:Class { name: "AnimalBasedMaterial"})
+WHERE b.brandName IN ["Converse","New Balance","Nike"]
+AND NOT semantics.inference.inCategory(item,ab,{ inCatRel: "CONTAINS" })
+RETURN item.url, item.itemName, item.composition ;
 
 
-MATCH (item:Item) WHERE item.name CONTAINS $searchterm
+
+
 
 
 
