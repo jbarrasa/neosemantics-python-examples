@@ -5,7 +5,7 @@ CREATE INDEX ON :Category(catName);
 CREATE INDEX ON :Brand(brandName);
 
 //Init the graph config
-call n10s.graphconfig.init({ keepLangTag: true, handleMultival: 'ARRAY'});
+call n10s.graphconfig.init({ handleVocabUris: "IGNORE", keepLangTag: true, handleMultival: 'ARRAY'});
 
 // Import Clothing Materials Ontology
 
