@@ -1,3 +1,6 @@
+// Constraint creation
+CREATE CONSTRAINT n10s_unique_uri ON (r:Resource) ASSERT r.uri IS UNIQUE;
+
 // Index creation
 CREATE INDEX ON :Item(itemId);
 CREATE INDEX ON :Department(deptName);
